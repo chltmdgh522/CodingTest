@@ -38,10 +38,10 @@ public class DP9465 {
         dp[1][1] = arr[1][0];
 
         for (int j = 2; j < N + 1; j++) {
-            arr[0][j] = Math.max(arr[1][j - 1], arr[1][j - 2]) + arr[0][j];
-            arr[1][j] = Math.max(arr[0][j - 1], arr[0][j - 2]) + arr[1][j];
+            dp[0][j] = Math.max(dp[1][j - 1], dp[1][j - 2]) + arr[0][j];
+            dp[1][j] = Math.max(dp[0][j - 1], dp[0][j - 2]) + arr[1][j];
         }
 
-        System.out.println(Math.max(arr[0][N], arr[1][N]));
+        System.out.println(Math.max(dp[0][N], dp[1][N]));
     }
 }
