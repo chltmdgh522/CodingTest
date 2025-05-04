@@ -18,19 +18,17 @@ public class Solution {
                 num[i] = Integer.parseInt(st.nextToken());
             }
 
-            int[][] dp = new int[N + 1][K + 1];
-            dp[0][0] = 1;  // 아무것도 선택하지 않았을 때 합 0 하나 존재
+            // dp[i] = 합이 i가 되는 부분집합의 개수
+            int[] dp = new int[K + 1];
+            dp[0] = 1; // 아무것도 선택하지 않았을 때 합 0인 경우 하나 존재
 
-            for (int i = 1; i <= N; i++) {
-                for (int j = 0; j <= K; j++) {
-                    dp[i][j] = dp[i - 1][j];  // i번째 숫자 안 쓴 경우
-                    if (j >= num[i - 1]) {
-                        dp[i][j] += dp[i - 1][j - num[i - 1]];  // i번째 숫자 쓴 경우
-                    }
+            for (int i = 0; i < N; i++) {
+                for (int j = K; j >= num[i]; j--) {
+                    dp[j] += dp[j - num[i]];
                 }
             }
 
-            System.out.println("#" + test + " " + dp[N][K]);
+            System.out.println("#" + test + " " + dp[K]);
         }
     }
 }
