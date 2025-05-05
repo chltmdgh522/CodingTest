@@ -1,67 +1,56 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Solution {
 
-   static int[] num;
-   static int max;
+    static int N;
 
-   public static void main(String[] args) throws NumberFormatException, IOException {
-      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-      StringTokenizer st;
+    static char[] num;
 
-      int t = Integer.parseInt(br.readLine());
+    static String result;
 
-      for (int i = 1; i < t + 1; i++) {
-         st = new StringTokenizer(br.readLine());
-         String text = st.nextToken();
-         num = new int[text.length()];
-         for (int j = 0; j < text.length(); j++) {
-            num[j] = Integer.parseInt(text.substring(j, j + 1));
-         }
-         int n = Integer.parseInt(st.nextToken());
+    static int length;
 
-         if(num.length < n) {
-        	 n=num.length;
-         }
-         max = 0;
-         solution(n, 0);
-         System.out.println("#" + i + " " + max);
-      }
-   }
 
-   private static void solution(int n, int depth) {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-      if (depth == n) {
-         String text="";
-         for (int i = 0; i < num.length; i++) {
-            text += num[i];
-         }
-        max = Math.max(max, Integer.parseInt(text));
-         return;
-      }
-      
+        int T = Integer.parseInt(br.readLine());
+        for (int test = 1; test < T + 1; test++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            String input = st.nextToken();
+            N = Integer.parseInt(st.nextToken());
+            length = input.length();
 
-      for (int i = 0; i < num.length; i++) {
-         for (int j = i+1; j < num.length; j++) {
-            swap(i, j);
-            solution(n, depth + 1);
-            swap(i, j);
+            num = input.toCharArray();
+            result = "";
+            solution(0,0);
+            System.out.println("#" + test + " " + result);
+        }
+    }
 
-         }
-      }
+    private static void solution(int depth, int count) {
+        if (count == N) {
+            String current = new String(num);
+            if(current.compareTo(result) > 0){
+                result = current;
+            }
+            return;
+        }
 
-   }
-   
-   public static void swap(int i, int j) {
-      int temp=0;
-      
-      temp=num[i];
-      num[i]=num[j];
-      num[j]=temp;
-   
-   }
+        for (int i = depth; i < length; i++) {
+            for (int j = i+1; j < length; j++) {
+                swap(i, j);
+                solution(i,count+1);
+                swap(i, j);
+            }
+        }
+    }
 
+    private static void swap(int front, int back) {
+        char temp = 0;
+        temp = num[front];
+        num[front] = num[back];
+        num[back] = temp;
+    }
 }
