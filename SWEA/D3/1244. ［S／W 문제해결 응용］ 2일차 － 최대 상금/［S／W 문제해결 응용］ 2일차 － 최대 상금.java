@@ -12,6 +12,7 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+        
         int T = Integer.parseInt(br.readLine());
         for (int test = 1; test <= T; test++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -27,13 +28,13 @@ public class Solution {
                 visited[i] = new HashSet<>();
             }
 
-            solution(0);
+            solution(0,0);
 
             System.out.println("#" + test + " " + result);
         }
     }
 
-    private static void solution(int count) {
+    private static void solution(int depth, int count) {
         String current = new String(num);
         if (visited[count].contains(current)) return;
         visited[count].add(current);
@@ -45,10 +46,10 @@ public class Solution {
             return;
         }
 
-        for (int i = 0; i < length - 1; i++) {
+        for (int i = depth; i < length - 1; i++) {
             for (int j = i + 1; j < length; j++) {
                 swap(i, j);
-                solution(count + 1);
+                solution(i,count + 1);
                 swap(i, j); // backtracking
             }
         }
