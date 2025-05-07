@@ -27,43 +27,25 @@ public class Solution {
     }
 
     private static void solution() {
-        //가로
-        for (int i = 0; i < 100; i++) {
-            int sum = 0;
-            for (int j = 0; j < 100; j++) {
-                sum += map[i][j];
-            }
-
-            result = Math.max(sum, result);
-        }
-
-        //세로
-        for (int i = 0; i < 100; i++) {
-            int sum = 0;
-            for (int j = 0; j < 100; j++) {
-                sum += map[j][i];
-            }
-
-            result = Math.max(sum, result);
-        }
-
-        //앞대각선
         int fsum = 0;
-        for (int i = 0; i < 100; i++) {
-            for (int j = i; j < i + 1; j++) {
-                fsum += map[j][i];
-            }
-        }
-        result = Math.max(fsum, result);
-
-        //뒤대각선
         int bsum = 0;
-        for (int i = 99; i >= 0; i--) {
-            for (int j = i; j > i - 1; j--) {
-                bsum += map[j][i];
-            }
-        }
-        result = Math.max(bsum, result);
 
+        for (int i = 0; i < 100; i++) {
+            int rowSum = 0;
+            int colSum = 0;
+            for (int j = 0; j < 100; j++) {
+                rowSum += map[i][j];
+                colSum += map[j][i];
+            }
+
+            result = Math.max(rowSum, result);
+            result = Math.max(colSum, result);
+
+            fsum += map[i][i];
+            bsum += map[i][99 - i];
+        }
+
+        result = Math.max(fsum, result);
+        result = Math.max(bsum, result);
     }
 }
