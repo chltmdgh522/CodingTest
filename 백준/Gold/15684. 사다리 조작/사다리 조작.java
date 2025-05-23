@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,26 +49,27 @@ public class Main {
 
     }
 
-    private static void solution(int x, int y, int ladder,int maxLadder) {
-
-        if (ladder == maxLadder) {
-            if (mapCheck()) {
-                finish = true;
-            }
-            return;
+private static void solution(int x, int y, int ladder, int maxLadder) {
+    if (ladder == maxLadder) {
+        if (mapCheck()) {
+            finish = true;
         }
-        for (int i = x; i <= H; i++) {
-            for (int j = y; j < N; j++) {
-                if (map[i][j] == 0 && map[i][j + 1] == 0 ) {
-                    map[i][j] = 1;
-                    map[i][j + 1] = 2;
-                    solution(1,1, ladder + 1, maxLadder);
-                    map[i][j] = 0;
-                    map[i][j + 1] = 0;
-                }
+        return;
+    }
+
+    for (int i = x; i <= H; i++) {
+        for (int j = (i == x ? y : 1); j < N; j++) {
+            if (map[i][j] == 0 && map[i][j + 1] == 0) {
+                map[i][j] = 1;
+                map[i][j + 1] = 2;
+                solution(i, j + 2, ladder + 1, maxLadder);
+                map[i][j] = 0;
+                map[i][j + 1] = 0;
             }
         }
     }
+}
+
 
     private static boolean mapCheck() {
         boolean finish = false;
