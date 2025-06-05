@@ -4,40 +4,35 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int n;
-    static int[][] arr;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        n = Integer.parseInt(br.readLine());
-        arr = new int[n][2];
-        for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            arr[i][0] = Integer.parseInt(st.nextToken());
-            arr[i][1] = Integer.parseInt(st.nextToken());
-        }
-
-        System.out.println(solution());
-    }
-
-    public static int solution() {
-        return getMaxProfit(0);
-    }
-
-    public static int getMaxProfit(int day) {
-        if (day >= n)
-            return 0;
-
-        // 현재 상담을 선택하지 않는 경우
-        int profit1 = getMaxProfit(day + 1);
-
-        // 현재 상담을 선택하는 경우
-        int profit2 = 0;
-        if (day + arr[day][0] <= n) {
-            profit2 = arr[day][1] + getMaxProfit(day + arr[day][0]);
-        }
-
-        return Math.max(profit1, profit2);
-    }
+   public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N = Integer.parseInt(br.readLine()); // N까지만 일 함
+		
+		int[] T = new int[N+1];
+		int[] P = new int[N+1];
+		int[] DP = new int[N+2];
+		
+		for(int i=1; i<=N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+			T[i] = Integer.parseInt(st.nextToken()); // 상담 하는데 걸리는 일 수
+			P[i] = Integer.parseInt(st.nextToken()); // 돈
+		}
+		
+		for(int i = N; i > 0; i--) {
+			int next = i + T[i]; // 다음 날짜
+			
+			if(next > N + 1) { // 일할 수 있는 날짜를 넘어가는 경우
+				// 일을 하지 못하므로 바로 다음 DP값(더 앞쪽의 날짜)로 설정
+				DP[i] = DP[i + 1];
+			} else { // 일할 수 있는 날짜인 경우
+				// 1. 일하지 않았을 때(DP[i + 1])
+				// 2. 일 했을 때 총 벌 수 있는 금액(P[i] + DP[next])
+				// 위 두 경우 중 더 큰 값을 DP에 넣어준다.
+				DP[i] = Math.max(DP[i + 1], P[i] + DP[next]);
+			}
+		}
+		
+		System.out.println(DP[1]);
+	}
 }
