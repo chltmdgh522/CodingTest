@@ -17,8 +17,6 @@ public class Main {
     static int[][] room;
 
 
-    static boolean[][] visit;
-
     static int uaX;
     static int uaY;
     static int baX;
@@ -39,7 +37,6 @@ public class Main {
 
         boolean mFlag = false;
         room = new int[R][C];
-        visit = new boolean[R][C];
         for (int i = 0; i < R; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < C; j++) {
@@ -51,7 +48,6 @@ public class Main {
                     baY = j;
                     mFlag = true;
                 }
-                if (room[i][j] > 0) visit[i][j] = true;
             }
         }
         for (int i = 0; i < T; i++) {
@@ -63,7 +59,6 @@ public class Main {
             for (int j = 0; j < C; j++) {
                 if (room[i][j] == -1) continue;
                 if (room[i][j] == 0) continue;
-
                 result += room[i][j];
             }
 
@@ -77,7 +72,7 @@ public class Main {
         Queue<int[]> mungiData = new LinkedList<>();
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-
+                if (room[i][j] <= 0) continue;
                 dataMungi(i, j, mungiData);
             }
         }
@@ -123,7 +118,7 @@ public class Main {
             }
             if (core == 0) continue;
             tempRoom[poll[0]][poll[1]] += core;
-            visit[poll[0]][poll[1]] = true;
+
         }
 
         // 마지막 원소 바꿔주기
