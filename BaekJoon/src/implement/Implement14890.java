@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Implement14890 {
-    static int n;
+    static int N;
 
-    static int l;
+    static int L;
 
     static int[][] map;
 
@@ -17,45 +17,87 @@ public class Implement14890 {
         StringTokenizer st;
         st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(st.nextToken());
-        l = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        L = Integer.parseInt(st.nextToken());
 
-        map = new int[n][n];
+        map = new int[N][N];
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < N; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        System.out.println(solution());
+        int result = solution();
+        System.out.println(result);
+
     }
 
     private static int solution() {
+        int answer = 0;
 
-        int pre1=0;
-        int cnt1=0;
-        int answer=0;
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                if(j==0) {
-                    pre1 = map[i][j];
-                }
-                if(Math.abs(pre1 -map[i][j] )==1 ){
-                    cnt1++;
-                    answer++;
-                }
-
-                else{
-                    break;
-                }
-
+        // 가로 줄 체크
+        for (int i = 0; i < N; i++) {
+            int[] row = new int[N];
+            for (int j = 0; j < N; j++) {
+                row[j] = map[i][j];
             }
-            cnt1=0;
+            if (check(row)) {
+                answer++;
+            }
+        }
 
+        // 세로 줄 체크
+        for (int i = 0; i < N; i++) {
+            int[] col = new int[N];
+            for (int j = 0; j < N; j++) {
+                col[j] = map[j][i];
+            }
+            if (check(col)) {
+                answer++;
+            }
         }
 
         return answer;
     }
+
+    private static boolean check(int[] line) {
+        boolean[] visit = new boolean[N];
+        for (int i = 0; i < N - 1; i++) {
+            int diff = line[i + 1] - line[i];
+            // 같을때 넘기기
+            if (diff == 0) {
+                continue;
+            }
+            // 양수 오르막길
+            else if (diff == 1) {
+                for (int j = 0; j < L; j++) {
+                    int idx = i - j;
+                    if (idx < 0  || line[i] != line[idx] || visit[idx]) {
+                        return false;
+                    }
+                    visit[idx] = true;
+                }
+            }
+            // 음수 내리막길
+            else if (diff == -1) {
+                for (int j = 0; j < L; j++) {
+                    int idx = i + j + 1;
+                    if (idx >=N  || line[i+1] != line[idx] || visit[idx]) {
+                        return false;
+                    }
+                    visit[idx] = true;
+                }
+
+            }
+            // 차이가 2 이상이면 false
+            else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
