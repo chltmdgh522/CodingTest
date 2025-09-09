@@ -1,67 +1,63 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Solution {
+    static int N;
+    static char[] num;
+    static String result;
+    static int length;
 
-   static int[] num;
-   static int max;
+    static Set<String>[] visited; // 깊이에 따른 방문 상태 저장
 
-   public static void main(String[] args) throws NumberFormatException, IOException {
-      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-      StringTokenizer st;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-      int t = Integer.parseInt(br.readLine());
+        
+        int T = Integer.parseInt(br.readLine());
+        for (int test = 1; test <= T; test++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            String input = st.nextToken();
+            N = Integer.parseInt(st.nextToken());
 
-      for (int i = 1; i < t + 1; i++) {
-         st = new StringTokenizer(br.readLine());
-         String text = st.nextToken();
-         num = new int[text.length()];
-         for (int j = 0; j < text.length(); j++) {
-            num[j] = Integer.parseInt(text.substring(j, j + 1));
-         }
-         int n = Integer.parseInt(st.nextToken());
+            num = input.toCharArray();
+            length = num.length;
+            result = "0";
 
-         if(num.length < n) {
-        	 n=num.length;
-         }
-         max = 0;
-         solution(n, 0);
-         System.out.println("#" + i + " " + max);
-      }
-   }
+            visited = new HashSet[N + 1]; // 깊이마다 Set 초기화
+            for (int i = 0; i <= N; i++) {
+                visited[i] = new HashSet<>();
+            }
 
-   private static void solution(int n, int depth) {
+            solution(0,0);
 
-      if (depth == n) {
-         String text="";
-         for (int i = 0; i < num.length; i++) {
-            text += num[i];
-         }
-        max = Math.max(max, Integer.parseInt(text));
-         return;
-      }
-      
+            System.out.println("#" + test + " " + result);
+        }
+    }
 
-      for (int i = 0; i < num.length; i++) {
-         for (int j = i+1; j < num.length; j++) {
-            swap(i, j);
-            solution(n, depth + 1);
-            swap(i, j);
+    private static void solution(int depth, int count) {
+        String current = new String(num);
+        if (visited[count].contains(current)) return;
+        visited[count].add(current);
 
-         }
-      }
+        if (count == N) {
+            if (current.compareTo(result) > 0) {
+                result = current;
+            }
+            return;
+        }
 
-   }
-   
-   public static void swap(int i, int j) {
-      int temp=0;
-      
-      temp=num[i];
-      num[i]=num[j];
-      num[j]=temp;
-   
-   }
+        for (int i = depth; i < length - 1; i++) {
+            for (int j = i + 1; j < length; j++) {
+                swap(i, j);
+                solution(i,count + 1);
+                swap(i, j); // backtracking
+            }
+        }
+    }
 
+    private static void swap(int i, int j) {
+        char tmp = num[i];
+        num[i] = num[j];
+        num[j] = tmp;
+    }
 }
