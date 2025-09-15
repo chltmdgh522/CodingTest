@@ -1,52 +1,68 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class Main {
+    static int N;
+
+    static boolean[] finished;
+
     static int[] map;
-    static boolean[] visited, finished;
-    static int cnt;
+
+    static boolean[] visit;
+
+    static int result;
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+        StringTokenizer st;
         int T = Integer.parseInt(br.readLine());
-
-        while (T-- > 0) {
-            int N = Integer.parseInt(br.readLine());
-            map = new int[N + 1];
-            visited = new boolean[N + 1];
+        for (int i = 0; i < T; i++) {
+            N = Integer.parseInt(br.readLine());
+            visit = new boolean[N + 1];
             finished = new boolean[N + 1];
-            cnt = 0;
+            map = new int[N + 1];
+            result = 0;
 
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int i = 1; i <= N; i++) {
-                map[i] = Integer.parseInt(st.nextToken());
+            st = new StringTokenizer(br.readLine());
+            for (int j = 1; j <= N; j++) {
+                map[j] = Integer.parseInt(st.nextToken());
             }
 
-            for (int i = 1; i <= N; i++) {
-                if (!visited[i]) dfs(i);
+
+            for (int k = 1; k <= N; k++) {
+                if (!visit[k]) {
+                    teamMatching(k);
+                }
             }
 
-            sb.append(N - cnt).append("\n");
+
+            System.out.println(N - result);
+
         }
-
-        System.out.print(sb);
     }
 
-    private static void dfs(int cur) {
-        visited[cur] = true;
+    private static void teamMatching(int cur) {
+        visit[cur] = true;
         int next = map[cur];
 
-        if (!visited[next]) {
-            dfs(next);
-        } else if (!finished[next]) { 
-            // 사이클 발견
-            cnt++;
-            for (int i = next; i != cur; i = map[i]) {
-                cnt++;
+        if (!visit[next]) {
+            teamMatching(next);
+        } else if (!finished[next]) {
+            int i = next;
+
+            while (i != cur) {
+                result++;
+                i = map[i];
             }
+            result++; // 자기 자신
         }
 
         finished[cur] = true;
+
     }
 }
